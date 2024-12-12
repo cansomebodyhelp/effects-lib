@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+**Цей проект є відеобібліотекою, який має в собі тестування та відображення еффектів в програмі After Effects.** 
+
+**Проект складається з frontend, backend и бази даних, яка має в собі дві таблиці Category та Effect.** 
+**Backend повинен витягувати категорію та відображати всі її об'єкти на страниці.** 
+
+
+
+
+ Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
