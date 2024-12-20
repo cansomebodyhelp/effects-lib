@@ -40,7 +40,7 @@ header .logo {
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 40px;
+  padding: 0px;
   background: #f4f4f4;
 }
 
