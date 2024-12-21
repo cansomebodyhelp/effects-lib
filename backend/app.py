@@ -37,12 +37,25 @@ def get_categories():
 def get_videos_by_category(category_id):
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM videos WHERE category_id = %s",
-                   (category_id,))  # Query the videos table by category_id
+    cursor.execute("""
+        SELECT v.id, v.name, v.preview_link, v.video_id, v.category_id, v.description, c.name as category_name
+        FROM videos v
+        JOIN categories c ON v.category_id = c.id
+        WHERE v.category_id = %s
+    """, (category_id,))
     videos = cursor.fetchall()
 
     videos_list = [
-        {"id": video[0], "name": video[1], "preview_link": video[2], "video_link": video[3], "category_id": video[4]}
+        {
+            "id": video[0],
+            "name": video[1],
+            "preview_link": video[2],
+            "video_id": video[3],
+            "category_id": video[4],
+            "description": video[5],
+            "category_name": video[6],
+            "video_url": f"https://www.youtube.com/watch?v={video[3]}"
+        }
         for video in videos
     ]
 
