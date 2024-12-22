@@ -54,7 +54,6 @@ def get_videos_by_category(category_id):
             "category_id": video[4],
             "description": video[5],
             "category_name": video[6],
-            "video_url": f"https://www.youtube.com/watch?v={video[3]}"
         }
         for video in videos
     ]

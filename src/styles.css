@@ -12,32 +12,69 @@ body {
   overflow-x: hidden;
 }
 
+/* Убираем отступы и добавляем box-sizing: border-box для всех элементов */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%; /* Устанавливаем высоту в 100% */
+  width: 100%; /* Устанавливаем ширину в 100% */
+}
+
+body {
+  /* Устанавливаем изображение фона */
+  background-image: url('background.png'); /* Путь к изображению фона */
+  background-size: cover; /* Масштабируем изображение, чтобы оно покрывало весь экран */
+  background-position: center center; /* Центрируем изображение */
+  background-repeat: no-repeat; /* Запрещаем повторение фона */
+  background-attachment: fixed; /* Фиксируем фон при прокрутке (опционально) */
+  color: white; /* Цвет текста для контента */
+}
+
 body {
   font-family: 'Muli', sans-serif;
   background-color: #121212;
   color: #f4f4f4;
 }
+body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Полупрозрачный черный фон с 50% прозрачности */
+  z-index: -1; /* Этот слой будет находиться под контентом */
+}
+
+.App {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
 
 .App-header {
-  background-color: #282c34;
-  min-height: 500px;
+  height: 500px; /* Задайте явную высоту */
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
   position: relative;
-  overflow: hidden;
 }
 
 .App-header h1 {
   font-size: 4rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-  margin: 0;
   z-index: 1;
   position: relative;
+  z-index: 1; /* Текст поверх анимации */
 }
 
 .categories {
@@ -46,8 +83,8 @@ body {
   flex-wrap: wrap;
   gap: 20px;
   padding: 40px;
-  background: #121212;
   animation: fade-in 1s ease-out forwards;
+  z-index: 1;
 }
 
 @keyframes fade-in {
@@ -103,6 +140,8 @@ body {
   height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+  min-height: 100vh; /* Теперь можно прокручивать */
+  overflow-y: auto; /* Добавил возможность прокручивать содержимое */
 }
 
 .category-header {
@@ -193,7 +232,6 @@ body {
   flex-wrap: wrap;
   gap: 40px;
   padding: 40px;
-  background: #121212;
   animation: fade-in 1s ease-out forwards;
 }
 

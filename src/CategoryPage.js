@@ -11,6 +11,7 @@ function CategoryPage() {
   const [selectedVideo, setSelectedVideo] = useState(null); // Состояние для выбранного видео
   const [isVideoMode, setIsVideoMode] = useState(false); // Режим просмотра видео
 
+  // Загружаем данные видео из API
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/videos/${categoryId}`)
       .then((response) => {
@@ -30,40 +31,71 @@ function CategoryPage() {
       });
   }, [categoryId]);
 
+  // Обработчик для клика по видео
   const handleVideoClick = (video) => {
     setSelectedVideo(video); // Устанавливаем выбранное видео
-    setIsVideoMode(true); // Переход в режим просмотра видео
+    setIsVideoMode(true); // Включаем режим просмотра видео
   };
 
+  // Закрыть поп-ап с видео
   const handleClosePopup = () => {
     setSelectedVideo(null); // Закрываем поп-ап
     setIsVideoMode(false); // Возвращаемся в режим категорий
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  // Обработчик ошибки
+  if (error) return <div className="error">Error: {error}</div>;
+
+  // Выводим ссылку в консоль для отладки
+  useEffect(() => {
+    if (selectedVideo) {
+      const videoUrl = `https://www.youtube.com/embed/${selectedVideo.video_id}`;
+      console.log('Video URL:', videoUrl); // Логируем URL видео
+    }
+  }, [selectedVideo]);
 
   return (
     <div className="category-page">
-      <header
-        className={`category-header ${isVideoMode ? 'header-hidden' : ''}`}
-      >
-        <h1>{categoryName}</h1>
-      </header>
-      <div className={`categories ${isVideoMode ? 'categories-hidden' : ''}`}>
-        {videos.map((video) => (
-          <div
-            key={video.id}
-            className="category-container"
-            style={{
-              backgroundImage: `url(${video.preview_link})`,
-            }}
-            onClick={() => handleVideoClick(video)} // Открываем поп-ап при клике на карточку
-          >
-            <div className="category-text">{video.name}</div>
+      {loading ? (
+        <div className="skeleton">
+          {/* Скелетон вместо текста */}
+          <div className="skeleton-header"></div>
+          <div className="skeleton-cards">
+            {Array(6)
+              .fill(0)
+              .map((_, index) => (
+                <div key={index} className="skeleton-card"></div>
+              ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <>
+          {/* Заголовок категории */}
+          <header
+            className={`category-header ${isVideoMode ? 'header-hidden' : ''}`}
+          >
+            <h1>{categoryName}</h1>
+          </header>
+
+          {/* Список видео */}
+          <div
+            className={`categories ${isVideoMode ? 'categories-hidden' : ''}`}
+          >
+            {videos.map((video) => (
+              <div
+                key={video.id}
+                className="category-container"
+                style={{
+                  backgroundImage: `url(${video.preview_link})`,
+                }}
+                onClick={() => handleVideoClick(video)} // Открываем поп-ап при клике на карточку
+              >
+                <div className="category-text">{video.name}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       {/* Показываем поп-ап, если видео выбрано */}
       {selectedVideo && (
@@ -76,7 +108,7 @@ function CategoryPage() {
             <iframe
               width="1008"
               height="567"
-              src={`https://www.youtube.com/embed/${selectedVideo.video_id}`} // Динамическое вставление ID
+              src={`https://www.youtube.com/embed/${selectedVideo.video_id}`} // Формируем ссылку с video_id
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>

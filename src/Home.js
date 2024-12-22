@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 function Home() {
+  const vantaRef = useRef(null); // Ссылка на DOM-элемент
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Загружаем категории из API
   useEffect(() => {
     fetch('http://127.0.0.1:5000/api/categories')
       .then((response) => {
@@ -27,19 +29,18 @@ function Home() {
   if (loading) {
     return (
       <div className="loading-screen">
-        <div className="spinner"></div> {}
+        <div className="spinner"></div>
       </div>
     );
   }
-
   if (error) return <div>Error: {error}</div>;
 
   const handleCategoryClick = (categoryId) => {
-    navigate(`/category/${categoryId}`); //
+    navigate(`/category/${categoryId}`);
   };
 
   return (
-    <div className="App">
+    <div ref={vantaRef} className="App">
       <header className="App-header">
         <h1>Video Library of Effects</h1>
       </header>
