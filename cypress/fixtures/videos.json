@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Test Video 1",
+    "preview_link": "http://example.com/preview1.jpg",
+    "video_id": "abcd1234",
+    "category_id": 1,
+    "description": "Description of video 1",
+    "category_name": "Test Category"
+  },
+  {
+    "id": 2,
+    "name": "Test Video 2",
+    "preview_link": "http://example.com/preview2.jpg",
+    "video_id": "abcd5678",
+    "category_id": 1,
+    "description": "Description of video 2",
+    "category_name": "Test Category"
+  }
+]

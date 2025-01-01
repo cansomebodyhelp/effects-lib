@@ -8,10 +8,10 @@ function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categoryName, setCategoryName] = useState('');
-  const [selectedVideo, setSelectedVideo] = useState(null); // Состояние для выбранного видео
-  const [isVideoMode, setIsVideoMode] = useState(false); // Режим просмотра видео
+  const [selectedVideo, setSelectedVideo] = useState(null); // Стан для обраного відео
+  const [isVideoMode, setIsVideoMode] = useState(false); // Режим перегляду відео
 
-  // Загружаем данные видео из API
+  // Завантажуємо дані відео з API
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/api/videos/${categoryId}`)
       .then((response) => {
@@ -31,26 +31,26 @@ function CategoryPage() {
       });
   }, [categoryId]);
 
-  // Обработчик для клика по видео
+  // Обробник для кліку на відео
   const handleVideoClick = (video) => {
-    setSelectedVideo(video); // Устанавливаем выбранное видео
-    setIsVideoMode(true); // Включаем режим просмотра видео
+    setSelectedVideo(video); // Встановлюємо обране відео
+    setIsVideoMode(true); // Вмикаємо режим перегляду відео
   };
 
-  // Закрыть поп-ап с видео
+  // Закрити поп-ап з відео
   const handleClosePopup = () => {
-    setSelectedVideo(null); // Закрываем поп-ап
-    setIsVideoMode(false); // Возвращаемся в режим категорий
+    setSelectedVideo(null); // Закриваємо поп-ап
+    setIsVideoMode(false); // Повертаємося до режиму категорій
   };
 
-  // Обработчик ошибки
+  // Обробка помилки
   if (error) return <div className="error">Error: {error}</div>;
 
-  // Выводим ссылку в консоль для отладки
+  // Виводимо посилання у консоль для налагодження
   useEffect(() => {
     if (selectedVideo) {
       const videoUrl = `https://www.youtube.com/embed/${selectedVideo.video_id}`;
-      console.log('Video URL:', videoUrl); // Логируем URL видео
+      console.log('Video URL:', videoUrl); // Логуємо URL відео
     }
   }, [selectedVideo]);
 
@@ -58,7 +58,7 @@ function CategoryPage() {
     <div className="category-page">
       {loading ? (
         <div className="skeleton">
-          {/* Скелетон вместо текста */}
+          {/* Скелетон замість тексту */}
           <div className="skeleton-header"></div>
           <div className="skeleton-cards">
             {Array(6)
@@ -70,14 +70,14 @@ function CategoryPage() {
         </div>
       ) : (
         <>
-          {/* Заголовок категории */}
+          {/* Заголовок категорії */}
           <header
             className={`category-header ${isVideoMode ? 'header-hidden' : ''}`}
           >
             <h1>{categoryName}</h1>
           </header>
 
-          {/* Список видео */}
+          {/* Список відео */}
           <div
             className={`categories ${isVideoMode ? 'categories-hidden' : ''}`}
           >
@@ -88,7 +88,7 @@ function CategoryPage() {
                 style={{
                   backgroundImage: `url(${video.preview_link})`,
                 }}
-                onClick={() => handleVideoClick(video)} // Открываем поп-ап при клике на карточку
+                onClick={() => handleVideoClick(video)} // Відкриваємо поп-ап при кліку на картку
               >
                 <div className="category-text">{video.name}</div>
               </div>
@@ -97,18 +97,18 @@ function CategoryPage() {
         </>
       )}
 
-      {/* Показываем поп-ап, если видео выбрано */}
+      {/* Показуємо поп-ап, якщо відео обрано */}
       {selectedVideo && (
         <div className="video-view">
           <button className="close-video" onClick={handleClosePopup}>
             &times;
           </button>
           <div className="video-player">
-            {/* Встраиваем YouTube плеер с использованием video_id */}
+            {/* Вбудовуємо YouTube плеєр з використанням video_id */}
             <iframe
               width="1008"
               height="567"
-              src={`https://www.youtube.com/embed/${selectedVideo.video_id}`} // Формируем ссылку с video_id
+              src={`https://www.youtube.com/embed/${selectedVideo.video_id}`} // Формуємо посилання з video_id
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
@@ -116,7 +116,7 @@ function CategoryPage() {
           <div className="video-info">
             <h2>{selectedVideo.name}</h2>
             <h3>Category: {selectedVideo.category_name}</h3>{' '}
-            {/* Заголовок для категории */}
+            {/* Заголовок для категорії */}
             <p>{selectedVideo.description}</p>
           </div>
         </div>

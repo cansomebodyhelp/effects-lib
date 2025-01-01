@@ -9,10 +9,11 @@ CORS(app)  # Allow requests from external sources
 # Set up database connection
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",  # MySQL server address
-        user="root",  # MySQL username
-        password="1233",  # MySQL password
-        database="video_library"  # Database name
+        host="junction.proxy.rlwy.net",  # Адрес сервера базы данных на Railway
+        user="root",  # Ваш пользователь
+        password="OskBxFUBaYfJfETGmzOdJzwnafdvTBRw",  # MySQL password
+        database="railway",  # Имя базы данных на Railway
+        port=28776  # Указываем порт, который предоставлен Railway
     )
 
 # Get all categories from the database
