@@ -11,7 +11,7 @@ function Home() {
 
   // Загружаем категории из API
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/categories')
+    fetch('https://lib-back-ab58.onrender.com/api/categories')
       .then((response) => {
         if (!response.ok) throw new Error('Network response was not ok');
         return response.json();

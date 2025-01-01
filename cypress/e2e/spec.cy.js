@@ -1,6 +1,6 @@
 describe('Сторінка категорії', () => {
   const categoryId = 1;
-  const apiUrl = `http://127.0.0.1:5000/api/videos/${categoryId}`;
+  const apiUrl = `https://lib-back-ab58.onrender.com/api/videos/${categoryId}`;
 
   beforeEach(() => {
     cy.intercept('GET', apiUrl, {
