@@ -8,57 +8,59 @@ function CategoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categoryName, setCategoryName] = useState('');
-  const [selectedVideo, setSelectedVideo] = useState(null); // Стан для обраного відео
-  const [isVideoMode, setIsVideoMode] = useState(false); // Режим перегляду відео
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isVideoMode, setIsVideoMode] = useState(false);
 
-  // Завантажуємо дані відео з API
   useEffect(() => {
-    fetch(`https://lib-back-ab58.onrender.com/api/videos/${categoryId}`)
-      .then((response) => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-      })
-      .then((data) => {
-        setVideos(data);
-        if (data.length > 0) {
-          setCategoryName(data[0].category_name || `Category ${categoryId}`);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
+    const cachedVideos = localStorage.getItem(`videos_${categoryId}`);
+    const cachedCategoryName = localStorage.getItem(
+      `categoryName_${categoryId}`
+    );
+
+    if (cachedVideos && cachedCategoryName) {
+      setVideos(JSON.parse(cachedVideos));
+      setCategoryName(cachedCategoryName);
+      setLoading(false);
+    } else {
+      setCategoryName('Loading...');
+      fetch(`https://lib-back-ab58.onrender.com/api/videos/${categoryId}`)
+        .then((response) => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then((data) => {
+          setVideos(data);
+          if (data.length > 0) {
+            const category = data[0].category_name || `Category ${categoryId}`;
+            setCategoryName(category);
+            localStorage.setItem(`categoryName_${categoryId}`, category);
+          }
+          localStorage.setItem(`videos_${categoryId}`, JSON.stringify(data));
+          setLoading(false);
+        })
+        .catch((error) => {
+          setError(error.message);
+          setLoading(false);
+        });
+    }
   }, [categoryId]);
 
-  // Обробник для кліку на відео
   const handleVideoClick = (video) => {
-    setSelectedVideo(video); // Встановлюємо обране відео
-    setIsVideoMode(true); // Вмикаємо режим перегляду відео
+    setSelectedVideo(video);
+    setIsVideoMode(true);
   };
 
-  // Закрити поп-ап з відео
   const handleClosePopup = () => {
-    setSelectedVideo(null); // Закриваємо поп-ап
-    setIsVideoMode(false); // Повертаємося до режиму категорій
+    setSelectedVideo(null);
+    setIsVideoMode(false);
   };
 
-  // Обробка помилки
   if (error) return <div className="error">Error: {error}</div>;
-
-  // Виводимо посилання у консоль для налагодження
-  useEffect(() => {
-    if (selectedVideo) {
-      const videoUrl = `https://www.youtube.com/embed/${selectedVideo.video_id}`;
-      console.log('Video URL:', videoUrl); // Логуємо URL відео
-    }
-  }, [selectedVideo]);
 
   return (
     <div className="category-page">
       {loading ? (
         <div className="skeleton">
-          {/* Скелетон замість тексту */}
           <div className="skeleton-header"></div>
           <div className="skeleton-cards">
             {Array(6)
@@ -70,14 +72,12 @@ function CategoryPage() {
         </div>
       ) : (
         <>
-          {/* Заголовок категорії */}
           <header
             className={`category-header ${isVideoMode ? 'header-hidden' : ''}`}
           >
             <h1>{categoryName}</h1>
           </header>
 
-          {/* Список відео */}
           <div
             className={`categories ${isVideoMode ? 'categories-hidden' : ''}`}
           >
@@ -88,7 +88,7 @@ function CategoryPage() {
                 style={{
                   backgroundImage: `url(${video.preview_link})`,
                 }}
-                onClick={() => handleVideoClick(video)} // Відкриваємо поп-ап при кліку на картку
+                onClick={() => handleVideoClick(video)}
               >
                 <div className="category-text">{video.name}</div>
               </div>
@@ -97,26 +97,23 @@ function CategoryPage() {
         </>
       )}
 
-      {/* Показуємо поп-ап, якщо відео обрано */}
       {selectedVideo && (
         <div className="video-view">
           <button className="close-video" onClick={handleClosePopup}>
             &times;
           </button>
           <div className="video-player">
-            {/* Вбудовуємо YouTube плеєр з використанням video_id */}
             <iframe
               width="1008"
               height="567"
-              src={`https://www.youtube.com/embed/${selectedVideo.video_id}`} // Формуємо посилання з video_id
+              src={`https://www.youtube.com/embed/${selectedVideo.video_id}`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
           </div>
           <div className="video-info">
             <h2>{selectedVideo.name}</h2>
-            <h3>Category: {selectedVideo.category_name}</h3>{' '}
-            {/* Заголовок для категорії */}
+            <h3>Category: {selectedVideo.category_name}</h3>
             <p>{selectedVideo.description}</p>
           </div>
         </div>
