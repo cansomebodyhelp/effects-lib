@@ -9,17 +9,12 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Проверяем, есть ли данные в localStorage
     const cachedCategories = localStorage.getItem('categories');
 
     if (cachedCategories) {
-      // Если данные есть в localStorage, используем их
-      console.log('Using cached data from localStorage');
       setCategories(JSON.parse(cachedCategories));
       setLoading(false);
     } else {
-      // Если данных нет, загружаем их с API
-      console.log('Fetching data from API');
       fetch('https://lib-back-ab58.onrender.com/api/categories')
         .then((response) => {
           if (!response.ok) throw new Error('Network response was not ok');
@@ -28,8 +23,6 @@ function Home() {
         .then((data) => {
           setCategories(data);
           setLoading(false);
-          // Сохраняем данные в localStorage для последующих запросов
-          console.log('Saving data to localStorage');
           localStorage.setItem('categories', JSON.stringify(data));
         })
         .catch((error) => {
